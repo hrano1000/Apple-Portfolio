@@ -1,0 +1,17 @@
+node_modules/
+dist/
+.next/
+.vinext/
+.wrangler/
+next-env.d.ts
+*.tsbuildinfo
+.env*
+.dev.vars*
+*.pem
+coverage/
+*.log
+.DS_Store
+Thumbs.db
+.codex/
+.playwright-cli/
+outputs/
