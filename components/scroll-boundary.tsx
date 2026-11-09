@@ -4,8 +4,15 @@ import { useEffect } from "react";
 
 export default function ScrollBoundary() {
   useEffect(() => {
-    // Older touch browsers need an edge-only fallback for CSS overscroll control.
-    if (CSS.supports("overscroll-behavior-y", "none")) return;
+    // Keep native pull-to-refresh at the top; suppress bottom bounce below it.
+    function updateBoundary() {
+      document.documentElement.classList.toggle("past-page-top", (document.scrollingElement?.scrollTop ?? 0) > 1);
+    }
+    updateBoundary();
+    window.addEventListener("scroll", updateBoundary, { passive: true });
+    window.addEventListener("resize", updateBoundary);
+
+    const needsTouchFallback = !CSS.supports("overscroll-behavior-y", "none");
 
     let previous: { x: number; y: number } | null = null;
     function start(event: TouchEvent) {
@@ -29,15 +36,22 @@ export default function ScrollBoundary() {
         if (scrollable && max > 1 && (dy > 0 ? element.scrollTop > 0 : element.scrollTop < max - 1)) return;
         element = element.parentElement;
       }
+      // A downward pull on the unlocked page belongs to the browser's refresh UI.
+      if (dy > 0 && root && !/^(hidden|clip)$/.test(getComputedStyle(root).overflowY)) return;
       event.preventDefault();
     }
     function end() { previous = null; }
 
-    document.addEventListener("touchstart", start, { passive: true });
-    document.addEventListener("touchmove", move, { passive: false });
-    document.addEventListener("touchend", end);
-    document.addEventListener("touchcancel", end);
+    if (needsTouchFallback) {
+      document.addEventListener("touchstart", start, { passive: true });
+      document.addEventListener("touchmove", move, { passive: false });
+      document.addEventListener("touchend", end);
+      document.addEventListener("touchcancel", end);
+    }
     return () => {
+      window.removeEventListener("scroll", updateBoundary);
+      window.removeEventListener("resize", updateBoundary);
+      document.documentElement.classList.remove("past-page-top");
       document.removeEventListener("touchstart", start);
       document.removeEventListener("touchmove", move);
       document.removeEventListener("touchend", end);
