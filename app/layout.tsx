@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import ThemeProvider from "@/components/theme-provider";
+import ScrollBoundary from "@/components/scroll-boundary";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -18,7 +19,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className="antialiased"><ThemeProvider>{children}</ThemeProvider></body>
+      <body className="antialiased"><ThemeProvider><ScrollBoundary />{children}</ThemeProvider></body>
     </html>
   );
 }
