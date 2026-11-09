@@ -123,7 +123,6 @@ export default function Portfolio({ profile }: { profile: Profile }) {
         <div className="contact-inner section-wrap">
           <div className="contact-heading-row" data-reveal><h2 id="contact-heading">Have a project?</h2><MagneticLink className="glass glass-button glass-primary" href={whatsappLink} target="_blank" rel="noopener noreferrer">Let’s talk</MagneticLink></div>
           <div className="contact-links" data-reveal><a href={emailLink}>Email me</a><a href={`tel:${profile.phone}`}>Call me</a></div>
-          <nav className="social-links" aria-label="Social media" data-reveal>{profile.socials.map(social => <a key={social.platform} className="social-link" href={social.url} target="_blank" rel="noopener noreferrer" aria-label={`${social.label}: ${social.handle}`} title={`${social.label} ${social.handle}`}><img src={`/social/${social.icon}.svg`} width="20" height="20" alt="" loading="lazy" /></a>)}</nav>
           <div className="footer-bottom"><span>© 2026 {profile.shortName}</span><div className="footer-actions"><a className="back-top" href="#home">Back to top</a><button className="glass help-button" type="button" ref={helpTrigger} aria-label="Help with this portfolio" aria-controls="help-panel" onClick={openHelp}>?</button></div></div>
         </div>
       </footer>
