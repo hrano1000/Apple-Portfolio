@@ -60,6 +60,10 @@ export default function PortraitIntro({ profile }: { profile: Profile }) {
       const bounds = glass.getBoundingClientRect();
       glass.style.setProperty("--glass-x", `${event.clientX - bounds.left}px`);
       glass.style.setProperty("--glass-y", `${event.clientY - bounds.top}px`);
+      if (glass.classList.contains("social-coin")) {
+        glass.style.setProperty("--coin-rx", `${((event.clientY - bounds.top) / bounds.height - .5) * -20}deg`);
+        glass.style.setProperty("--coin-ry", `${((event.clientX - bounds.left) / bounds.width - .5) * 24}deg`);
+      }
     }
     event.currentTarget.style.setProperty("--pointer-x", `${(event.clientX / window.innerWidth - 0.5) * 5}deg`);
     event.currentTarget.style.setProperty("--pointer-y", `${(event.clientY / window.innerHeight - 0.5) * -4}deg`);
@@ -71,7 +75,7 @@ export default function PortraitIntro({ profile }: { profile: Profile }) {
       <div className="hero-wallpaper" aria-hidden="true"><div className="wallpaper-ribbon" /><div className="wallpaper-orbit" /></div>
       <div className="hero-copy">
         <h1 id="hero-heading"><span>Full-stack</span><span>Software Engineer.</span></h1>
-        <nav className="social-links" aria-label="Social media">{profile.socials.map(social => <a key={social.platform} className="social-link glass" href={social.url} target="_blank" rel="noopener noreferrer" aria-label={`${social.label}: ${social.handle}`} title={`${social.label} ${social.handle}`}><img src={`/social/${social.icon}.svg`} width="21" height="21" alt="" /></a>)}</nav>
+        <nav className="social-links" aria-label="Social media">{profile.socials.map((social, index) => <a key={social.platform} className="social-link" href={social.url} target="_blank" rel="noopener noreferrer" aria-label={`${social.label}: ${social.handle}`} title={`${social.label} ${social.handle}`}><span className="social-coin glass" data-coin-index={index}><img src={`/social/${social.icon}.svg`} width="21" height="21" alt="" /></span></a>)}</nav>
       </div>
       <div className="depth-backdrop" aria-hidden="true"><span className="scene-word">RANO</span><div className="scene-grid" /><div className="scene-glow" /></div>
       <div className="avatar-stage" aria-label="Hassan’s portrait">
